@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Happy Birthday, Asshole 🖤</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --black: #0A0A0A;
+  --deep: #111111;
+  --card: #181818;
+  --border: #2a2a2a;
+  --white: #F5F5F5;
+  --grey: #888888;
+  --gold: #C9A84C;
+  --gold-dim: #8a6e2f;
+}
+html { scroll-behavior: smooth; }
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+}
+
+/* ── INTRO SCREEN ── */
+#intro {
+  position: fixed; inset: 0; z-index: 1000;
+  background: var(--black);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 1.5rem;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+#intro.gone { opacity: 0; visibility: hidden; pointer-events: none; }
+
+.intro-label {
+  font-size: 0.62rem; letter-spacing: 0.4em;
+  text-transform: uppercase; color: var(--gold);
+}
+.intro-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2rem, 8vw, 4.5rem);
+  font-weight: 300; text-align: center; line-height: 1.1;
+}
+.intro-title em { color: var(--gold); font-style: italic; }
+.intro-sub {
+  font-size: 0.75rem; color: var(--grey);
+  letter-spacing: 0.15em; text-align: center;
+}
+
+/* ── CAKE STAGE ── */
+#cake-stage {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 1.2rem;
+  margin-top: 1rem;
+}
+
+#cake-svg { width: 160px; height: 160px; cursor: pointer; }
+
+.candle-flame {
+  transform-origin: 50% 100%;
+  animation: flicker 0.8s ease-in-out infinite alternate;
+}
+@keyframes flicker {
+  from { transform: scaleX(1) scaleY(1) rotate(-2deg); opacity: 1; }
+  to   { transform: scaleX(0.85) scaleY(1.15) rotate(2deg); opacity: 0.85; }
+}
+.candle-flame.blown {
+  animation: blowOut 0.4s ease forwards;
+}
+@keyframes blowOut {
+  to { opacity: 0; transform: scaleY(0) translateY(-10px); }
+}
+
+.blow-hint {
+  font-size: 0.68rem; letter-spacing: 0.25em;
+  text-transform: uppercase; color: var(--grey);
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{opacity:0.4} 50%{opacity:1} }
+
+/* Enter btn */
+.enter-btn {
+  display: none;
+  background: transparent;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  padding: 0.7rem 2.5rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s;
+  margin-top: 0.5rem;
+}
+.enter-btn:hover { background: var(--gold); color: var(--black); }
+.enter-btn.visible { display: block; animation: fadeIn 0.6s ease forwards; }
+
+/* confetti canvas */
+#confetti-canvas {
+  position: fixed; inset: 0;
+  pointer-events: none; z-index: 999;
+}
+
+/* ── MAIN SITE ── */
+#main { opacity: 0; transition: opacity 1s ease; }
+#main.visible { opacity: 1; }
+
+/* HERO */
+#hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  position: relative; overflow: hidden; padding: 2rem;
+  text-align: center;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 40%, #1c1a12 0%, #0A0A0A 70%);
+}
+.lotus-wrap { position: relative; z-index: 2; margin-bottom: 2.5rem; }
+#lotus-svg { width: 180px; height: 180px; filter: drop-shadow(0 0 30px rgba(220,60,120,0.35)); }
+.petal { transform-origin: 50% 80%; opacity: 0; animation: bloom 1.8s cubic-bezier(.22,1,.36,1) forwards; }
+.petal:nth-child(1){animation-delay:.1s}
+.petal:nth-child(2){animation-delay:.2s}
+.petal:nth-child(3){animation-delay:.3s}
+.petal:nth-child(4){animation-delay:.4s}
+.petal:nth-child(5){animation-delay:.5s}
+.petal:nth-child(6){animation-delay:.6s}
+.petal:nth-child(7){animation-delay:.7s}
+.petal:nth-child(8){animation-delay:.8s}
+@keyframes bloom {
+  from { opacity:0; transform: scaleY(0.1); }
+  to   { opacity:1; transform: scaleY(1); }
+}
+.lotus-center { opacity:0; animation: fadeIn 0.6s ease forwards 1.2s; }
+@keyframes fadeIn { to { opacity:1; } }
+
+.eyebrow {
+  font-size: 0.62rem; letter-spacing: 0.35em;
+  color: var(--gold); text-transform: uppercase;
+  position: relative; z-index: 2; margin-bottom: 1rem;
+  opacity: 0; animation: slideUp 0.8s ease forwards 1.4s;
+}
+h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(3rem, 10vw, 7rem);
+  font-weight: 300; line-height: 1;
+  position: relative; z-index: 2;
+  opacity: 0; animation: slideUp 0.9s ease forwards 1.6s;
+}
+h1 em { color: var(--gold); font-style: italic; }
+.hero-sub {
+  font-size: 0.8rem; letter-spacing: 0.15em;
+  color: var(--grey); margin-top: 1.2rem;
+  position: relative; z-index: 2;
+  opacity: 0; animation: slideUp 0.8s ease forwards 1.9s;
+  line-height: 1.8; max-width: 480px;
+}
+@keyframes slideUp {
+  from { opacity:0; transform: translateY(20px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+
+/* ── SECTIONS ── */
+.section { max-width: 860px; margin: 0 auto; padding: 5rem 2rem; }
+.section-label {
+  font-size: 0.6rem; letter-spacing: 0.4em;
+  text-transform: uppercase; color: var(--gold);
+  margin-bottom: 2.5rem; display: block;
+}
+.divider { border: none; border-top: 1px solid var(--border); margin: 0 2rem; }
+
+/* ── MESSAGE CARD ── */
+.message-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 3rem 3rem;
+  position: relative; overflow: hidden;
+}
+.message-card::before {
+  content: '"';
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 14rem; color: var(--border);
+  position: absolute; top: -2rem; left: 1rem;
+  line-height: 1; pointer-events: none;
+}
+.message-card p {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.3rem, 3vw, 1.8rem);
+  font-weight: 300; line-height: 1.75;
+  color: var(--white); position: relative; z-index: 1;
+}
+.message-card p em { color: var(--gold); font-style: italic; }
+
+/* ── TRUTHS ── */
+.truth-list { list-style: none; counter-reset: truth; }
+.truth-list li {
+  counter-increment: truth;
+  display: flex; gap: 1.5rem; align-items: flex-start;
+  padding: 1.5rem 0; border-bottom: 1px solid var(--border);
+}
+.truth-list li:last-child { border-bottom: none; }
+.truth-list li::before {
+  content: counter(truth, decimal-leading-zero);
+  font-size: 0.65rem; color: var(--gold);
+  letter-spacing: 0.1em; min-width: 2rem; padding-top: 0.25rem;
+}
+.truth-list li p {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.25rem; font-weight: 300; line-height: 1.6;
+  color: var(--white);
+}
+.truth-list li p em { color: var(--gold); font-style: italic; }
+
+/* ── BOUQUET SECTION ── */
+.bouquet-wrap {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 1.5rem; text-align: center;
+}
+#bouquet-svg { width: 220px; height: 260px; cursor: pointer; filter: drop-shadow(0 0 20px rgba(232,48,106,0.2)); transition: filter 0.3s; }
+#bouquet-svg:hover { filter: drop-shadow(0 0 35px rgba(232,48,106,0.5)); }
+.bouquet-text h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 300; margin-bottom: 0.8rem;
+}
+.bouquet-text p {
+  font-size: 0.82rem; color: var(--grey);
+  line-height: 1.9; max-width: 420px; margin: 0 auto;
+}
+.bouquet-tap { font-size: 0.62rem; letter-spacing: 0.2em; color: var(--gold-dim); text-transform: uppercase; animation: pulse 2s ease-in-out infinite; }
+
+
+/* ── CLOSING ── */
+#closing {
+  text-align: center; padding: 8rem 2rem;
+}
+#closing h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.2rem, 7vw, 4.5rem);
+  font-weight: 300; line-height: 1.25;
+}
+#closing h2 em { color: var(--gold); font-style: italic; }
+#closing .sign {
+  margin-top: 2rem; font-size: 0.78rem;
+  letter-spacing: 0.15em; color: var(--grey);
+  text-transform: uppercase; line-height: 2;
+}
+.secret { font-size: 0.4rem; color: #111111; user-select: none; margin-top: 3rem; }
+
+footer {
+  border-top: 1px solid var(--border);
+  padding: 2rem; text-align: center;
+  font-size: 0.58rem; letter-spacing: 0.2em; color: #2e2e2e; text-transform: uppercase;
+}
+
+@media(max-width:600px){
+  .choc-grid { grid-template-columns: 1fr 1fr; }
+  .message-card { padding: 2rem 1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ CONFETTI CANVAS ══ -->
+<canvas id="confetti-canvas"></canvas>
+
+<!-- ══════════ INTRO / CAKE SCREEN ══════════ -->
+<div id="intro">
+  <span class="intro-label">A special occasion</span>
+  <h2 class="intro-title">Hello, <em>Asshole</em> 🖤<br/>Make a wish.</h2>
+  <p class="intro-sub">Tap the candles to blow them out</p>
+
+  <div id="cake-stage">
+    <!-- CAKE SVG -->
+    <svg id="cake-svg" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg" onclick="blowCandles()">
+      <!-- plate -->
+      <ellipse cx="80" cy="138" rx="62" ry="10" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+      <!-- cake bottom tier -->
+      <rect x="22" y="100" width="116" height="38" rx="4" fill="#1e1e1e" stroke="#2e2e2e" stroke-width="1"/>
+      <ellipse cx="80" cy="100" rx="58" ry="9" fill="#252525"/>
+      <!-- gold drip -->
+      <path d="M30 100 Q38 112 34 120 Q42 108 50 118 Q56 106 64 116 Q70 104 80 114 Q88 104 96 116 Q102 106 110 118 Q116 108 124 120 Q120 112 130 100" stroke="#C9A84C" stroke-width="1.5" fill="none" opacity="0.7"/>
+      <!-- cake top tier -->
+      <rect x="38" y="68" width="84" height="34" rx="4" fill="#222222" stroke="#2e2e2e" stroke-width="1"/>
+      <ellipse cx="80" cy="68" rx="42" ry="7" fill="#2a2a2a"/>
+      <!-- gold drip top -->
+      <path d="M44 68 Q50 78 47 84 Q54 74 60 82 Q66 72 74 80 Q80 70 86 80 Q92 72 98 82 Q104 74 110 84 Q107 78 116 68" stroke="#C9A84C" stroke-width="1.2" fill="none" opacity="0.6"/>
+      <!-- lotus decoration -->
+      <text x="80" y="90" text-anchor="middle" font-size="11" fill="#C9A84C" opacity="0.8">✿ ✿ ✿</text>
+      <!-- candles -->
+      <!-- candle 1 -->
+      <rect x="54" y="50" width="7" height="20" rx="1" fill="#333"/>
+      <ellipse class="candle-flame" id="flame1" cx="57.5" cy="48" rx="4" ry="6" fill="#C9A84C" opacity="0.95"/>
+      <!-- candle 2 -->
+      <rect x="76" y="44" width="7" height="26" rx="1" fill="#333"/>
+      <ellipse class="candle-flame" id="flame2" cx="79.5" cy="42" rx="4" ry="6" fill="#e8c060" opacity="0.95"/>
+      <!-- candle 3 -->
+      <rect x="98" y="50" width="7" height="20" rx="1" fill="#333"/>
+      <ellipse class="candle-flame" id="flame3" cx="101.5" cy="48" rx="4" ry="6" fill="#C9A84C" opacity="0.95"/>
+    </svg>
+
+    <p class="blow-hint" id="blow-hint">↑ tap to blow out the candles</p>
+    <button class="enter-btn" id="enter-btn" onclick="enterSite()">Enter — Happy Birthday 🖤</button>
+  </div>
+</div>
+
+<!-- ══════════ MAIN SITE ══════════ -->
+<div id="main">
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="lotus-wrap">
+      <svg id="lotus-svg" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse class="petal" cx="90" cy="72" rx="13" ry="38" fill="#E8306A" opacity="0.95"/>
+        <g transform="rotate(45 90 115)"><ellipse class="petal" cx="90" cy="72" rx="13" ry="38" fill="#D42060" opacity="0.9"/></g>
+        <g transform="rotate(90 90 115)"><ellipse class="petal" cx="90" cy="72" rx="13" ry="38" fill="#E8306A" opacity="0.85"/></g>
+        <g transform="rotate(135 90 115)"><ellipse class="petal" cx="90" cy="72" rx="13" ry="38" fill="#C01858" opacity="0.9"/></g>
+        <g transform="rotate(180 90 115)"><ellipse class="petal" cx="90" cy="72" rx="13" ry="38" fill="#E8306A" opacity="0.95"/></g>
+        <g transform="rotate(225 90 115)"><ellipse class="petal" cx="90" cy="72" rx="13" ry="38" fill="#D42060" opacity="0.9"/></g>
+        <g transform="rotate(270 90 115)"><ellipse class="petal" cx="90" cy="72" rx="13" ry="38" fill="#E8306A" opacity="0.85"/></g>
+        <g transform="rotate(315 90 115)"><ellipse class="petal" cx="90" cy="72" rx="13" ry="38" fill="#C01858" opacity="0.9"/></g>
+        <circle class="lotus-center" cx="90" cy="100" r="16" fill="#1a0510" stroke="#E8306A" stroke-width="1.5"/>
+        <circle class="lotus-center" cx="90" cy="100" r="7" fill="#f0d040" opacity="0.95"/>
+        <ellipse class="lotus-center" cx="90" cy="145" rx="38" ry="9" fill="#1c1c14" stroke="#2a2a1a" stroke-width="1"/>
+        <line class="lotus-center" x1="90" y1="116" x2="90" y2="145" stroke="#3a3a20" stroke-width="1.5"/>
+      </svg>
+    </div>
+    <span class="eyebrow">A celebration of you</span>
+    <h1>Happy Birthday,<br/><em>Asshole</em></h1>
+    <p class="hero-sub">
+      You are one of a kind — the kind of person I am endlessly grateful to have stumbled into. 
+      Today is yours, baby. Every bit of it. 🖤
+    </p>
+  </section>
+
+  <hr class="divider"/>
+
+  <!-- MESSAGE -->
+  <div class="section">
+    <span class="section-label">What I want you to know</span>
+    <div class="message-card">
+      <p>
+        You walk into a room and the whole energy shifts. Not because you try to — 
+        that's just <em>you</em>. The way you carry yourself, the way you think, 
+        the way you actually <em>understand</em> people without needing them to explain 
+        themselves a hundred times — it is genuinely rare. 
+        You get me. You handle me. You make space for me without making it feel like 
+        a big deal, and that means more than any grand gesture ever could. 
+        Being known by you is one of my favourite things about my life.
+      </p>
+    </div>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- TRUTHS -->
+  <div class="section">
+    <span class="section-label">Things that are just true</span>
+    <ul class="truth-list">
+      <li><p>You are <em>mature in ways that most people spend their whole lives chasing</em> — the calm, the depth, the way you show up. It's yours and it's beautiful.</p></li>
+      <li><p>You understand people on a level that takes most a lifetime to reach. You understood <em>me</em> — and that is not a small thing.</p></li>
+      <li><p>Your taste is impeccable. Your presence is commanding. Your humility — <em>charming work in progress.</em></p></li>
+      <li><p>The nickname is an inside joke. But the love behind it is <em>completely real</em>.</p></li>
+      <li><p>Of all the people who could have been <em>my person</em> — it being you feels like the universe was very specific about what it was doing.</p></li>
+    </ul>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- LOTUS BOUQUET -->
+  <div class="section">
+    <span class="section-label">For you — a bouquet</span>
+    <div class="bouquet-wrap">
+      <div>
+        <svg id="bouquet-svg" viewBox="0 0 220 260" fill="none" xmlns="http://www.w3.org/2000/svg" onclick="bloomBouquet()">
+          <!-- stems -->
+          <line x1="110" y1="260" x2="90" y2="160" stroke="#3a3a20" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="110" y1="260" x2="110" y2="155" stroke="#4a4a28" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="110" y1="260" x2="130" y2="160" stroke="#3a3a20" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="110" y1="260" x2="72" y2="175" stroke="#3a3a20" stroke-width="2" stroke-linecap="round"/>
+          <line x1="110" y1="260" x2="148" y2="175" stroke="#3a3a20" stroke-width="2" stroke-linecap="round"/>
+          <!-- leaves -->
+          <ellipse cx="95" cy="210" rx="12" ry="5" fill="#2a2a15" transform="rotate(-30 95 210)"/>
+          <ellipse cx="125" cy="215" rx="12" ry="5" fill="#2a2a15" transform="rotate(30 125 215)"/>
+          <!-- ribbon -->
+          <path d="M96 248 Q110 240 124 248" stroke="#C9A84C" stroke-width="2" fill="none"/>
+          <path d="M96 248 Q85 255 88 262" stroke="#C9A84C" stroke-width="1.5" fill="none"/>
+          <path d="M124 248 Q135 255 132 262" stroke="#C9A84C" stroke-width="1.5" fill="none"/>
+
+          <!-- lotus 1 — centre large -->
+          <g id="bl1">
+            <ellipse cx="110" cy="118" rx="11" ry="28" fill="#E8306A" opacity="0.95"/>
+            <g transform="rotate(40 110 145)"><ellipse cx="110" cy="118" rx="11" ry="28" fill="#D42060" opacity="0.9"/></g>
+            <g transform="rotate(80 110 145)"><ellipse cx="110" cy="118" rx="11" ry="28" fill="#E8306A" opacity="0.85"/></g>
+            <g transform="rotate(120 110 145)"><ellipse cx="110" cy="118" rx="11" ry="28" fill="#C01858" opacity="0.9"/></g>
+            <g transform="rotate(160 110 145)"><ellipse cx="110" cy="118" rx="11" ry="28" fill="#E8306A" opacity="0.95"/></g>
+            <g transform="rotate(200 110 145)"><ellipse cx="110" cy="118" rx="11" ry="28" fill="#D42060" opacity="0.85"/></g>
+            <g transform="rotate(240 110 145)"><ellipse cx="110" cy="118" rx="11" ry="28" fill="#E8306A" opacity="0.9"/></g>
+            <g transform="rotate(280 110 145)"><ellipse cx="110" cy="118" rx="11" ry="28" fill="#C01858" opacity="0.9"/></g>
+            <g transform="rotate(320 110 145)"><ellipse cx="110" cy="118" rx="11" ry="28" fill="#E8306A" opacity="0.9"/></g>
+            <circle cx="110" cy="138" r="10" fill="#1a0510" stroke="#E8306A" stroke-width="1.2"/>
+            <circle cx="110" cy="138" r="5" fill="#f0d040" opacity="0.95"/>
+          </g>
+
+          <!-- lotus 2 — left small -->
+          <g id="bl2" opacity="0.9">
+            <ellipse cx="76" cy="148" rx="8" ry="20" fill="#E8306A" opacity="0.9"/>
+            <g transform="rotate(60 76 168)"><ellipse cx="76" cy="148" rx="8" ry="20" fill="#D42060" opacity="0.85"/></g>
+            <g transform="rotate(120 76 168)"><ellipse cx="76" cy="148" rx="8" ry="20" fill="#E8306A" opacity="0.8"/></g>
+            <g transform="rotate(180 76 168)"><ellipse cx="76" cy="148" rx="8" ry="20" fill="#C01858" opacity="0.85"/></g>
+            <g transform="rotate(240 76 168)"><ellipse cx="76" cy="148" rx="8" ry="20" fill="#E8306A" opacity="0.9"/></g>
+            <g transform="rotate(300 76 168)"><ellipse cx="76" cy="148" rx="8" ry="20" fill="#D42060" opacity="0.8"/></g>
+            <circle cx="76" cy="162" r="7" fill="#1a0510" stroke="#E8306A" stroke-width="1"/>
+            <circle cx="76" cy="162" r="3.5" fill="#f0d040" opacity="0.95"/>
+          </g>
+
+          <!-- lotus 3 — right small -->
+          <g id="bl3" opacity="0.9">
+            <ellipse cx="144" cy="148" rx="8" ry="20" fill="#E8306A" opacity="0.9"/>
+            <g transform="rotate(60 144 168)"><ellipse cx="144" cy="148" rx="8" ry="20" fill="#D42060" opacity="0.85"/></g>
+            <g transform="rotate(120 144 168)"><ellipse cx="144" cy="148" rx="8" ry="20" fill="#E8306A" opacity="0.8"/></g>
+            <g transform="rotate(180 144 168)"><ellipse cx="144" cy="148" rx="8" ry="20" fill="#C01858" opacity="0.85"/></g>
+            <g transform="rotate(240 144 168)"><ellipse cx="144" cy="148" rx="8" ry="20" fill="#E8306A" opacity="0.9"/></g>
+            <g transform="rotate(300 144 168)"><ellipse cx="144" cy="148" rx="8" ry="20" fill="#D42060" opacity="0.8"/></g>
+            <circle cx="144" cy="162" r="7" fill="#1a0510" stroke="#E8306A" stroke-width="1"/>
+            <circle cx="144" cy="162" r="3.5" fill="#f0d040" opacity="0.95"/>
+          </g>
+        </svg>
+        <p class="bouquet-tap">↑ tap to make it bloom</p>
+      </div>
+      <div class="bouquet-text">
+        <h2>A lotus for you.</h2>
+        <p>
+          Because you bloom in your own time, in your own way — 
+          quietly, beautifully, and with a kind of grace that most people 
+          don't even know how to recognize. 
+          This bouquet is yours. Just like this day is yours. 🖤
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- CLOSING -->
+  <section id="closing">
+    <h2>To the one who gets me —<br/><em>Happy Birthday, Baby.</em></h2>
+    <div class="sign">
+      You are loved more than you know.<br/>
+      Have the most beautiful day. 🖤
+    </div>
+    <p class="secret">i love u</p>
+  </section>
+
+  <footer>
+    Made with 🖤 — for the most magnificent asshole I know.
+  </footer>
+</div>
+
+<script>
+// ── CANDLE BLOW ──
+let candlesBlown = false;
+
+function blowCandles() {
+  if (candlesBlown) return;
+  candlesBlown = true;
+
+  ['flame1','flame2','flame3'].forEach((id, i) => {
+    setTimeout(() => {
+      const el = document.getElementById(id);
+      el.classList.remove('candle-flame');
+      el.classList.add('candle-flame','blown');
+    }, i * 120);
+  });
+
+  setTimeout(() => {
+    document.getElementById('blow-hint').textContent = '🎂 You did it! Happy Birthday, Asshole 🖤';
+    document.getElementById('blow-hint').style.color = '#C9A84C';
+    launchConfetti();
+  }, 600);
+
+  setTimeout(() => {
+    document.getElementById('enter-btn').classList.add('visible');
+  }, 1800);
+}
+
+// ── CONFETTI ──
+function launchConfetti() {
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const pieces = Array.from({length: 90}, () => ({
+    x: Math.random() * canvas.width,
+    y: -20,
+    r: 4 + Math.random() * 5,
+    d: 2 + Math.random() * 4,
+    color: ['#C9A84C','#F5F5F5','#888888','#b8953e','#e8c060'][Math.floor(Math.random()*5)],
+    tilt: Math.random() * 10 - 5,
+    tiltSpeed: 0.1 + Math.random() * 0.2,
+    angle: 0
+  }));
+
+  let frame = 0;
+  function draw() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    pieces.forEach(p => {
+      p.y += p.d;
+      p.tilt += p.tiltSpeed;
+      p.angle += 0.05;
+      ctx.beginPath();
+      ctx.ellipse(p.x + Math.sin(p.angle)*8, p.y, p.r, p.r*0.4, p.tilt, 0, 2*Math.PI);
+      ctx.fillStyle = p.color;
+      ctx.fill();
+    });
+    frame++;
+    if (frame < 160) requestAnimationFrame(draw);
+    else ctx.clearRect(0,0,canvas.width,canvas.height);
+  }
+  draw();
+}
+
+// ── ENTER SITE ──
+function enterSite() {
+  document.getElementById('intro').classList.add('gone');
+  const main = document.getElementById('main');
+  main.classList.add('visible');
+}
+
+// ── BOUQUET BLOOM on tap ──
+let bouquetBloomed = false;
+function bloomBouquet() {
+  if (bouquetBloomed) return;
+  bouquetBloomed = true;
+  const svg = document.getElementById('bouquet-svg');
+  svg.style.transition = 'filter 0.6s ease, transform 0.6s ease';
+  svg.style.filter = 'drop-shadow(0 0 50px rgba(232,48,106,0.7))';
+  svg.style.transform = 'scale(1.08)';
+  // sparkle particles via canvas (reuse confetti canvas lightly)
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+  const rect = svg.getBoundingClientRect();
+  const cx = rect.left + rect.width/2, cy = rect.top + rect.height/3;
+  const sparks = Array.from({length: 40}, () => ({
+    x: cx, y: cy,
+    vx: (Math.random()-0.5)*6,
+    vy: -2 - Math.random()*5,
+    life: 1, decay: 0.02+Math.random()*0.02,
+    r: 2+Math.random()*3,
+    color: ['#E8306A','#ff6699','#F5F5F5','#D42060','#ffaac8'][Math.floor(Math.random()*5)]
+  }));
+  function sparkDraw() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    let alive = false;
+    sparks.forEach(s => {
+      s.x += s.vx; s.y += s.vy; s.vy += 0.12; s.life -= s.decay;
+      if (s.life > 0) {
+        alive = true;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, 2*Math.PI);
+        ctx.fillStyle = s.color;
+        ctx.globalAlpha = s.life;
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      }
+    });
+    if (alive) requestAnimationFrame(sparkDraw);
+    else ctx.clearRect(0,0,canvas.width,canvas.height);
+  }
+  sparkDraw();
+  document.querySelector('.bouquet-tap').style.opacity = '0';
+}
+</script>
+</body>
+</html>
